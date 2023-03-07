@@ -1,24 +1,18 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import About from "./components/About";
+import LoginPage from "./components/auth/login";
+import Home from "./components/Home";
 
 function App() {
-  const [count, setCount] = useState(0);
 
   return (
     <div className="App">
-      <Switch>
-        <Route path="/abouts">
-          <About />
-        </Route>
-        <Route path="/users">
-          <Users />
-        </Route>
-        <Route path="/">
-          <Home />
-        </Route>
-      </Switch>
+      <Routes>
+        <Route path="/login"  element={<LoginPage />}/>
+        <Route path="/about"  element={<About />}/>
+        <Route path="/" element={<Home />} />
+      </Routes>
     </div>
   );
 }
