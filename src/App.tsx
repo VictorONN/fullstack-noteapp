@@ -3,7 +3,10 @@ import reactLogo from "./assets/react.svg";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Home from "./components/Home";
-import About from "./components/About";
+import Signup from "./components/Signup";
+import Login from "./components/Login";
+
+import { AuthProvider } from "./Auth";
 
 function App() {
   return (
@@ -32,14 +35,19 @@ function App() {
       </nav>
 
       <div className="App">
-        <Routes>
-          <Route path="/abouts">
-            <About />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/signup">
+              <Signup />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/">
+              <Home />
+            </Route>
+          </Routes>
+        </AuthProvider>
       </div>
     </div>
   );
