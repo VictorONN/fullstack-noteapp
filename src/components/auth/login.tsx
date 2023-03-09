@@ -1,6 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { authentication } from "../../firebase-config";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
 
 function LoginPage() {
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('')
+    const [submittingData, setSubmittingData] = useState(false)
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const user = authentication.currentUser
+        if (user) {
+            // User is signed in.
+            navigate("/dashboard");
+        } else {
+            // No user is signed in.
+        }
+    }, [])
     return (<React.Fragment>
 
         {/* <!--begin::Main--> */}
@@ -36,8 +54,8 @@ function LoginPage() {
 
                         {/* <!--begin::Illustration--> */}
                         <div className="d-none d-lg-block d-flex flex-row-auto bgi-no-repeat bgi-position-x-center bgi-size-contain bgi-position-y-bottom min-h-100px min-h-lg-350px"
-                            style={{backgroundImage:"url(./assets/media/illustrations/sigma-1/17.png)"}}>
-                                {/* "background-image: url(../../assets/media/illustrations/sigma-1/17.png)" */}
+                            style={{ backgroundImage: "url(./assets/media/illustrations/sigma-1/17.png)" }}>
+                            {/* "background-image: url(../../assets/media/illustrations/sigma-1/17.png)" */}
                         </div>
                         {/* <!--end::Illustration--> */}
                     </div>
@@ -65,9 +83,9 @@ function LoginPage() {
                                     <div className="text-gray-400 fw-semibold fs-4">
                                         New Here?
 
-                                        <a href="../sign-up/basic.html" className="link-primary fw-bold">
+                                        <Link to="/register" className="link-primary fw-bold">
                                             Create an Account
-                                        </a>
+                                        </Link>
                                     </div>
                                     {/* <!--end::Link--> */}
                                 </div>
@@ -80,7 +98,7 @@ function LoginPage() {
                                     {/* <!--end::Label--> */}
 
                                     {/* <!--begin::Input--> */}
-                                    <input className="form-control form-control-lg form-control-solid" type="text" name="email" autoComplete="off" />
+                                    <input className="form-control form-control-lg form-control-solid" type="text" name="email" autoComplete="off" onChange={(e) => { setEmail(e.target.value) }} />
                                     {/* <!--end::Input--> */}
                                 </div>
                                 {/* <!--end::Input group--> */}
@@ -102,7 +120,7 @@ function LoginPage() {
                                     {/* <!--end::Wrapper--> */}
 
                                     {/* <!--begin::Input--> */}
-                                    <input className="form-control form-control-lg form-control-solid" type="password" name="password" autoComplete="off" />
+                                    <input className="form-control form-control-lg form-control-solid" type="password" name="password" autoComplete="off" onChange={(e) => { setPassword(e.target.value) }} />
                                     {/* <!--end::Input-->         */}
                                 </div>
                                 {/* <!--end::Input group--> */}
@@ -110,14 +128,43 @@ function LoginPage() {
                                 {/* <!--begin::Actions--> */}
                                 <div className="text-center">
                                     {/* <!--begin::Submit button--> */}
-                                    <button type="submit" id="kt_sign_in_submit" className="btn btn-lg btn-primary w-100 mb-5">
-                                        <span className="indicator-label">
-                                            Continue
-                                        </span>
+                                    <button type="submit" id="kt_sign_in_submit" className="btn btn-lg btn-primary w-100 mb-5" onClick={(e) => {
+                                        e.preventDefault();
+                                        setSubmittingData(true);
 
-                                        <span className="indicator-progress">
-                                            Please wait... <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                        </span>
+                                        signInWithEmailAndPassword(authentication, email, password)
+                                            .then((response) => {
+                                                console.log("Response " + JSON.stringify(response));
+                                                console.log("Response User " + JSON.stringify(response.user));
+                                                // window.localStorage.setItem("token", response)
+                                                // sessionStorage.setItem('token', response.user..refreshToken)
+                                                // navigate 
+
+                                                navigate("/dashboard");
+
+                                            }).catch((error) => {
+                                                if (error.code == "auth/email-already-in-use") {
+                                                    alert("The email address is already in use");
+                                                } else if (error.code == "auth/invalid-email") {
+                                                    alert("The email address is not valid.");
+                                                } else if (error.code == "auth/operation-not-allowed") {
+                                                    alert("Operation not allowed.");
+                                                } else if (error.code == "auth/weak-password") {
+                                                    alert("The password is too weak.");
+                                                }
+
+                                                setSubmittingData(false);
+                                            });
+
+                                        // navigate("/about");
+                                    }}>
+                                        {
+                                            submittingData ? <span className="indicator-label">
+                                                Please wait...
+                                            </span> : <span className="indicator-label">
+                                                Continue
+                                            </span>
+                                        }
                                     </button>
                                     {/* <!--end::Submit button--> */}
 

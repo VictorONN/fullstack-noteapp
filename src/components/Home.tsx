@@ -1,5 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { authentication } from "../firebase-config";
 
-export default function Home() {
-  return <h1>Home page placeholder</h1>;
-}
+
+const Home = () => {
+  
+
+  return (
+    <div>
+      <h1>Home page placeholder</h1>
+    
+    </div>
+  );
+};
+
+export default Home;

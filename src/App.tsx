@@ -1,20 +1,25 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import "./App.css";
+
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import About from "./components/About";
+import SignUpPage from "./components/auth/Signup";
 import LoginPage from "./components/auth/login";
 import Home from "./components/Home";
-import Users from "./components/Users";
+import Dashboard from "./components/dashboard/dashboard";
+
+// import { AuthProvider } from "./Auth";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <div className="App">
-           <Routes>
-        <Route path="/login"  element={<LoginPage />}/>
-        <Route path="/about"  element={<About />}/>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<SignUpPage />} />
+
+        <Route path="/dashboard" element={<Dashboard />} />
+
+        
+        <Route path="/about" element={<About />} />
         <Route path="/" element={<Home />} />
       </Routes>
     </div>
